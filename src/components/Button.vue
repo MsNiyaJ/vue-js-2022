@@ -18,7 +18,6 @@ export default {
       console.log('clicked');
     },
   },
-  onClick() {},
 };
 </script>
 <style></style>

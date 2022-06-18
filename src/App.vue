@@ -10,10 +10,53 @@
 import Header from './components/Header.vue';
 import { defineComponent } from 'vue';
 
+/**
+ * @description The list of properties associated with a task.
+ * @property {number} id - The ID of the task.
+ * @property {string} text - The text of the task.
+ * @property {string} day - The day of the task.
+ * @property {boolean} completed - Whether the task is completed.
+ */
+interface TasksInterface {
+  id: number;
+  text: string;
+  day: string;
+  completed: boolean;
+}
+
 export default defineComponent({
   name: 'App',
+  // List of child compponents
   components: {
     Header,
+  },
+  // List of props
+  data() {
+    return {
+      tasks: [] as TasksInterface[],
+    };
+  },
+  created() {
+    this.tasks = [
+      {
+        id: 1,
+        text: 'Learn Vue',
+        day: 'March 1st at 2:30PM',
+        completed: false,
+      },
+      {
+        id: 2,
+        text: 'Doctors Appointment',
+        day: 'March 3rd at 2:30PM',
+        completed: false,
+      },
+      {
+        id: 3,
+        text: 'Food Shopping',
+        day: 'March 12st at 1:30PM',
+        completed: false,
+      },
+    ];
   },
 });
 </script>
