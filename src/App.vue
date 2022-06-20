@@ -84,9 +84,27 @@ export default defineComponent({
     toggleAddTask() {
       this.showAddTask = !this.showAddTask;
     },
-    toggleReminder(id: number) {
+    // Update the reminder status of a task
+    async toggleReminder(id: number) {
+      const taskToToggle = await this.fetchTask(id);
+      const updatedTask = {
+        ...taskToToggle,
+        reminder: !taskToToggle.reminder,
+      };
+
+      const response = await fetch(`/api/tasks/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedTask),
+      });
+
+      const data = await response.json();
+
+      // Update the task
       this.tasks = this.tasks.map((task) =>
-        task.id === id ? { ...task, reminder: !task.reminder } : task
+        task.id === id ? { ...task, reminder: data.reminder } : task
       );
     },
     // Get all tasks
