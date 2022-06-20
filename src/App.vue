@@ -68,10 +68,17 @@ export default defineComponent({
       this.tasks = [...this.tasks, data];
       this.showAddTask = false;
     },
-
-    deleteTask(id: number) {
+    async deleteTask(id: number) {
       if (confirm('Are you sure you want to delete this task?')) {
-        this.tasks = this.tasks.filter((task) => task.id !== id);
+        const response = await fetch(`/api/tasks/${id}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          this.tasks = this.tasks.filter((task) => task.id !== id);
+        } else {
+          alert('An error occurred while deleting the task.');
+        }
       }
     },
     toggleAddTask() {
