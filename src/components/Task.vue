@@ -40,7 +40,7 @@ export default defineComponent({
 }
 
 .task.reminder {
-  border-left: 5px solid green;
+  border-left: 5px solid #5d2c82;
 }
 
 h3 {

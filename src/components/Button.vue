@@ -3,8 +3,11 @@
     {{ text }}
   </button>
 </template>
+
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   name: 'Button',
   props: {
     text: {
@@ -15,9 +18,10 @@ export default {
   },
   methods: {
     onClick() {
-      console.log('clicked');
+      this.$emit('toggle-add-task');
     },
   },
-};
+});
 </script>
+
 <style></style>

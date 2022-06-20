@@ -1,8 +1,14 @@
 <!-- Template (HTML) -->
 <template>
   <div class="container">
-    <Header title="Task Tracker" />
-    <AddTask @add-task="addTask" />
+    <Header
+      @toggle-add-task="toggleAddTask"
+      title="Task Tracker"
+      :showAddTask="showAddTask"
+    />
+    <div v-if="showAddTask">
+      <AddTask @add-task="addTask" />
+    </div>
     <Tasks
       @toggle-reminder="toggleReminder"
       @delete-task="deleteTask"
@@ -44,16 +50,21 @@ export default defineComponent({
   data() {
     return {
       tasks: [] as TasksInterface[],
+      showAddTask: false,
     };
   },
   methods: {
     addTask(task: TasksInterface) {
       this.tasks = [task, ...this.tasks];
+      this.showAddTask = false;
     },
     deleteTask(id: number) {
       if (confirm('Are you sure you want to delete this task?')) {
         this.tasks = this.tasks.filter((task) => task.id !== id);
       }
+    },
+    toggleAddTask() {
+      this.showAddTask = !this.showAddTask;
     },
     toggleReminder(id: number) {
       this.tasks = this.tasks.map((task) =>
