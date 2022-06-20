@@ -54,10 +54,21 @@ export default defineComponent({
     };
   },
   methods: {
-    addTask(task: TasksInterface) {
-      this.tasks = [task, ...this.tasks];
+    async addTask(task: TasksInterface) {
+      const response = await fetch('/api/tasks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(task),
+      });
+
+      const data = await response.json();
+
+      this.tasks = [...this.tasks, data];
       this.showAddTask = false;
     },
+
     deleteTask(id: number) {
       if (confirm('Are you sure you want to delete this task?')) {
         this.tasks = this.tasks.filter((task) => task.id !== id);
@@ -71,28 +82,22 @@ export default defineComponent({
         task.id === id ? { ...task, reminder: !task.reminder } : task
       );
     },
+    // Get all tasks
+    async fetchTasks() {
+      const response = await fetch('api/tasks');
+      const data: TasksInterface[] = await response.json();
+      return data;
+    },
+    // Get a task with the given ID
+    async fetchTask(id: number) {
+      const response = await fetch(`api/tasks/${id}`);
+      const data: TasksInterface = await response.json();
+      return data;
+    },
   },
-  created() {
-    this.tasks = [
-      {
-        id: 1,
-        text: 'Learn Vue',
-        day: 'March 1st at 2:30PM',
-        reminder: true,
-      },
-      {
-        id: 2,
-        text: 'Doctors Appointment',
-        day: 'March 3rd at 2:30PM',
-        reminder: true,
-      },
-      {
-        id: 3,
-        text: 'Food Shopping',
-        day: 'March 12st at 1:30PM',
-        reminder: false,
-      },
-    ];
+  async created() {
+    const tasks = await this.fetchTasks();
+    this.tasks = tasks;
   },
 });
 </script>
