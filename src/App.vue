@@ -2,12 +2,18 @@
 <template>
   <div class="container">
     <Header title="Task Tracker" />
+    <Tasks
+      @toggle-reminder="toggleReminder"
+      @delete-task="deleteTask"
+      :tasks="tasks"
+    />
   </div>
 </template>
 
 <!-- Logic (JS) -->
 <script lang="ts">
 import Header from './components/Header.vue';
+import Tasks from './components/Tasks.vue';
 import { defineComponent } from 'vue';
 
 /**
@@ -17,11 +23,11 @@ import { defineComponent } from 'vue';
  * @property {string} day - The day of the task.
  * @property {boolean} completed - Whether the task is completed.
  */
-interface TasksInterface {
+export interface TasksInterface {
   id: number;
   text: string;
   day: string;
-  completed: boolean;
+  reminder: boolean;
 }
 
 export default defineComponent({
@@ -29,6 +35,7 @@ export default defineComponent({
   // List of child compponents
   components: {
     Header,
+    Tasks,
   },
   // List of props
   data() {
@@ -36,25 +43,35 @@ export default defineComponent({
       tasks: [] as TasksInterface[],
     };
   },
+  methods: {
+    deleteTask(id: number) {
+      this.tasks = this.tasks.filter((task) => task.id !== id);
+    },
+    toggleReminder(id: number) {
+      this.tasks = this.tasks.map((task) =>
+        task.id === id ? { ...task, reminder: !task.reminder } : task
+      );
+    },
+  },
   created() {
     this.tasks = [
       {
         id: 1,
         text: 'Learn Vue',
         day: 'March 1st at 2:30PM',
-        completed: false,
+        reminder: true,
       },
       {
         id: 2,
         text: 'Doctors Appointment',
         day: 'March 3rd at 2:30PM',
-        completed: false,
+        reminder: true,
       },
       {
         id: 3,
         text: 'Food Shopping',
         day: 'March 12st at 1:30PM',
-        completed: false,
+        reminder: false,
       },
     ];
   },
